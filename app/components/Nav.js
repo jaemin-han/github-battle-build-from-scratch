@@ -23,6 +23,6 @@ funtion Nav() {
 
         </ul>
     )
-}
+};
 
 module.exports = Nav;
