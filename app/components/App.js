@@ -19,7 +19,7 @@ class App extends React.Component {
                     {/* Switch - when this runs, instead of rendering all routes that are active, switch will render one specific route */}
                     <Switch>
                         <Route exact path="/" component={Home} />
-                        <Route path="/battle" component={Battle} />
+                        <Route exact path="/battle" component={Battle} />
                         <Route path="/popular" component={Popular} />
                         <Route render={function() {
                             return <p>Not Found</p>
