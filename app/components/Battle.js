@@ -104,6 +104,7 @@ class Battle extends React.Component {
         // 'this' keyword inside 'handleSubmit' function is always going to be referenced in the instance
         // this line allows us to do that.
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleReset = this.handleReset.bind(this);
     }
 
     handleSubmit(id, username) {
@@ -114,6 +115,14 @@ class Battle extends React.Component {
             newState[id + 'Image'] = 'https://github.com/' + username + '.png?size=200';
             return newState;
         });
+    }
+    handleReset(id) {
+        this.setState(function() {
+            var newState = {};
+            newState[id + 'Name'] = "";
+            newState[id + 'Image'] = null;
+            return newState;
+        })
     }
 
     render() {
