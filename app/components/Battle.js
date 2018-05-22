@@ -1,5 +1,6 @@
 var React = require('react');
 var PropTypes = require('prop-types');
+var Link = require('react-router-dom').Link;
 
 //stateless functional component
 function PlayerPreview(props) {
@@ -27,7 +28,7 @@ PlayerPreview.propTypes = {
     username: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     onReset: PropTypes.func.isRequired
-}
+};
 
 class PlayerInput extends React.Component {
     constructor() {
@@ -90,6 +91,10 @@ PlayerInput.propTypes = {
     onSubmit: PropTypes.func.isRequired
 }
 
+PlayerInput.defaultProps = {
+    label: 'Username',
+}
+
 class Battle extends React.Component {
     constructor() {
         super();
@@ -99,7 +104,7 @@ class Battle extends React.Component {
             PlayerTwoName: "",
             playerOneImage: null,
             playerTwoImage: null
-        }
+        };
 
         // 'this' keyword inside 'handleSubmit' function is always going to be referenced in the instance
         // this line allows us to do that.
@@ -108,7 +113,7 @@ class Battle extends React.Component {
     }
 
     handleSubmit(id, username) {
-        this.setState(function () {
+        this.setState( () => {
             var newState = {};
             //if id is player one -- update...etc
             newState[id + 'Name'] = username;
@@ -117,7 +122,7 @@ class Battle extends React.Component {
         });
     }
     handleReset(id) {
-        this.setState(function() {
+        this.setState( () => {
             var newState = {};
             newState[id + 'Name'] = "";
             newState[id + 'Image'] = null;
@@ -126,15 +131,17 @@ class Battle extends React.Component {
     }
 
     render() {
+        var match = this.props.match;
         var playerOneName = this.state.playerOneName;
-        var playerTwoName = this.state.playerTwoName;
         var playerOneImage = this.state.playerOneImage;
+        var playerTwoName = this.state.playerTwoName;
         var playerTwoImage = this.state.playerTwoImage;
 
         return (
             <div>
                 <div className="row">
                     {/* ternary operator - IF THEN */}
+                    {/* if playerOneName is falsey... show PlayerInput */}
                     {!playerOneName &&
                         <PlayerInput
                             id="playerOne"
@@ -142,11 +149,11 @@ class Battle extends React.Component {
                             onSubmit={this.handleSubmit}
                         />
                     }
-
+                    {/* ternary operator - IF THEN */}
                     {playerOneImage !== null &&
                         <PlayerPreview
                             avatar={playerOneImage}
-                            username={playerOneImage}
+                            username={playerOneName}
                             onReset={this.handleReset}
                             id="playerOne"
                         />
@@ -163,13 +170,21 @@ class Battle extends React.Component {
                     {playerTwoImage !== null &&
                         <PlayerPreview
                             avatar={playerTwoImage}
-                            username={playerTwoImage}
+                            username={playerTwoName}
                             onReset={this.handleReset}
                             id="playerTwo"
                         />
                     }
-
                 </div>
+                {playerOneImage && playerTwoImage &&
+                    <Link
+                        className="button"
+                        to={{
+                            pathname: match.url + "/results",
+                            search: "?playerOneName=" + playerOneName + "&playerTwoName=" + playerTwoName
+                        }}>
+                            Battle
+                    </Link>}
             </div>
         )
     }
