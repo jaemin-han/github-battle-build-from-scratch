@@ -99,6 +99,8 @@ class Popular extends React.Component {
                 />
                 {/* {JSON.stringify(this.state.repos, 2, null)} */}
                 {!this.state.repos
+                    // This example below, we can update as needed without modifying the code.
+                    // ? <Loading text="TEST" speed={10}/>
                     ? <Loading />
                     : <RepoGrid repos={this.state.repos} /> }
                 
