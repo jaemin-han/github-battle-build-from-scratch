@@ -1,7 +1,7 @@
-const React = require('react');
-const PropTypes = require('prop-types');
-const Link = require('react-router-dom').Link;
-const PlayerPreview = require('./PlayerPreview');
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import PlayerPreview from './PlayerPreview';
 
 class PlayerInput extends React.Component {
   constructor(props) {
@@ -152,7 +152,8 @@ class Battle extends React.Component {
   }
 }
 
-module.exports = Battle;
+export default Battle;
+// module.exports = Battle;
 
 // 1.Battle.js will initially render two player inputs
 //     a. player one and player two - default falsy (empty strings)

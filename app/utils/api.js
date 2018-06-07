@@ -1,5 +1,5 @@
 
-const axios = require('axios');
+import axios from 'axios';
 
 const id = "YOUR_CLIENT_ID";
 const sec = "YOUR_SECRET_ID";
@@ -59,22 +59,36 @@ function sortPlayers (players) {
   return players.sort((a,b) => b.score - a.score);
 }
 
-module.exports = {
-  battle (players) {
+// Just exporting two functions - if we need to import these two functions, 
+// import { fetchPopularRepos} from '../api' as example
+export function battle (players) {
     return Promise.all(players.map(getUserData))
       .then(sortPlayers)
       .catch(handleError);
-  },
+}
+
+export function fetchPopularRepos (language) {
+    const encodedURI = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`);
+    return axios.get(encodedURI).then(({ data }) => data.items);
+}
+
+// Objects with two different properties Example ONE
+// module.exports = {
+//   battle (players) {
+//     return Promise.all(players.map(getUserData))
+//       .then(sortPlayers)
+//       .catch(handleError);
+//   },
       // battle to return a promise. When it is resolved, it will going to have all players' info
     // map over players, 'getUserData' which will call 'getProfile' and 'getRepos'.
     // once we get those info, return 'profile' and 'score' objects
     // then sort array in the 'sortPlayers' function
 
   // Removed function keywords
-  fetchPopularRepos (language) {
+  // fetchPopularRepos (language) {
     // Using template string
-    const encodedURI = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`);
+//     const encodedURI = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`);
 
-    return axios.get(encodedURI).then(({ data }) => data.items);
-  }
-};
+//     return axios.get(encodedURI).then(({ data }) => data.items);
+//   }
+// };
