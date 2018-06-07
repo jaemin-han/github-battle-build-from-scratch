@@ -64,31 +64,37 @@ class Results extends React.Component {
   //     loading: true,
   //   }
   // }
-  componentDidMount() {
+  async componentDidMount() {
     // Destructuring
     const { playerOneName, playerTwoName } = queryString.parse(this.props.location.search);
 
-    battle([
+    const players = await battle ([
       // Direct because there are variables for these
       playerOneName,
       playerTwoName
-    ]).then((players) => {
-      if (players === null) {
-        return this.setState(() => ({
-          //implicit return
-          error: 'Looks like there was an error. Check that both users exist on Github.',
-          loading: false,
-        }))
-      }
+    ])
 
-      this.setState(() => ({
-        // Implicit Return on object
-          error: null,
-          winner: players[0],
-          loser: players[1],
-          loading: false,
-      }));
-    });
+    // battle([
+    //   // Direct because there are variables for these
+    //   playerOneName,
+    //   playerTwoName
+    // ]).then((players) => {
+    if (players === null) {
+      return this.setState(() => ({
+        //implicit return
+        error: 'Looks like there was an error. Check that both users exist on Github.',
+        loading: false,
+      }))
+    }
+
+    this.setState(() => ({
+      // Implicit Return on object
+        error: null,
+        winner: players[0],
+        loser: players[1],
+        loading: false,
+    }));
+    // });
   }
   render() {
     // Destructuring

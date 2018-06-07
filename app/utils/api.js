@@ -9,11 +9,12 @@ const params = `?client_id=${id}&client_secret=${sec}`;
 // PROMISE
 // Make a 'Get' request to the url below
 // Axios will return a promise by returning an object that has a .then() property
-function getProfile (username) {
-  return axios.get(`https://api.github.com/users/${username}${params}`)
+async function getProfile (username) {
+  const profile = await axios.get(`https://api.github.com/users/${username}${params}`)
     // When this function is invoked, it's going to pass a user or whatever we get from github api
     // but it will only going to be invoked after we get the information back
-    .then(({ data }) => data);
+    return profile.data
+      // .then(({ data }) => data);
 }
 
 function getRepos (username) {
@@ -42,17 +43,29 @@ function handleError (error) {
   return null;
 }
 
-function getUserData (player) {
-  // Native Promises for ES6
-  return Promise.all([
+async function getUserData (player) {
+  const [ profile, repos] = await Promise.all([
     getProfile(player),
     getRepos(player)
     // Arrow function, destructuring arrays and returning object
-  ]).then(([profile, repos ]) => ({
+  ])
+
+  return {
+  //Shorthand notation
+    profile,
+    score: calculateScore(profile, repos)
+  }
+
+  // Native Promises for ES6
+  // return Promise.all([
+  //   getProfile(player),
+  //   getRepos(player)
+    // Arrow function, destructuring arrays and returning object
+  // ]).then(([profile, repos ]) => ({
     //Shorthand notation
-      profile,
-      score: calculateScore(profile, repos)
-  }))
+      // profile,
+      // score: calculateScore(profile, repos)
+  // }))
 }
 // Arrow function and implicit return
 function sortPlayers (players) {
@@ -61,15 +74,30 @@ function sortPlayers (players) {
 
 // Just exporting two functions - if we need to import these two functions, 
 // import { fetchPopularRepos} from '../api' as example
-export function battle (players) {
-    return Promise.all(players.map(getUserData))
-      .then(sortPlayers)
-      .catch(handleError);
+export async function battle (players) {
+  const results = await Promise.all(players.map(getUserData))
+    .catch(handleError);
+
+    return results === null
+      ? results
+      : sortPlayers(results);
+
+      // Deleted for async/await refactoring
+    // return Promise.all(players.map(getUserData))
+    //   .then(sortPlayers)
+    //   .catch(handleError);
 }
 
-export function fetchPopularRepos (language) {
+export async function fetchPopularRepos (language) {
     const encodedURI = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`);
-    return axios.get(encodedURI).then(({ data }) => data.items);
+    
+    const repos = await axios.get(encodedURI)
+      .catch(handleError);
+
+    return repos.data.items
+
+    // Deleted for async/await refactoring
+    // return axios.get(encodedURI).then(({ data }) => data.items);
 }
 
 // Objects with two different properties Example ONE
