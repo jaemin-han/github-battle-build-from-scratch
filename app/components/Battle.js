@@ -88,11 +88,11 @@ class Battle extends React.Component {
   handleReset = (id) => {
     this.setState(() => ({
       [id + 'Name']: '',
-      [id + 'Image']: ''
+      [id + 'Image']: null
     }))
   }
   render() {
-    const { match } = this.props
+    const { match } = this.props;
     // Destructuring
     const { playerOneName, playerOneImage, playerTwoName, playerTwoImage } = this.state
 

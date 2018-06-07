@@ -1,5 +1,5 @@
-
-import axios from 'axios';
+// No longer use axios due to fetch
+// import axios from 'axios';
 
 const id = "YOUR_CLIENT_ID";
 const sec = "YOUR_SECRET_ID";
@@ -10,20 +10,25 @@ const params = `?client_id=${id}&client_secret=${sec}`;
 // Make a 'Get' request to the url below
 // Axios will return a promise by returning an object that has a .then() property
 async function getProfile (username) {
-  const profile = await axios.get(`https://api.github.com/users/${username}${params}`)
+  const response = await fetch(`https://api.github.com/users/${username}${params}`)
+  // axios gave json() for us but not for fetch
+  return profile.json();
+  // const profile = await axios.get(`https://api.github.com/users/${username}${params}`)
     // When this function is invoked, it's going to pass a user or whatever we get from github api
     // but it will only going to be invoked after we get the information back
-    return profile.data
+    // return profile.data
       // .then(({ data }) => data);
 }
 
-function getRepos (username) {
-  return axios.get(`https://api.github.com/users/${username}/repos${params}&per_page=100`);
+async function getRepos (username) {
+  const reponse = await fetch(`https://api.github.com/users/${username}/repos${params}&per_page=100`);
+  
+  return response.json();
 }
 
 function getStarCount (repos) {
   // basically when you get the information back from github api, then... call the function and pass us whatever the information (in this case User)
-  return repos.data.reduce((count, { stargazers_count }) => count +stargazers_count, 0);
+  return repos.reduce((count, { stargazers_count }) => count +stargazers_count, 0);
   // Arrow function and implicit return
 }
 // Reduce - allows us to take an array and reduce it to a single value
@@ -91,10 +96,14 @@ export async function battle (players) {
 export async function fetchPopularRepos (language) {
     const encodedURI = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`);
     
-    const repos = await axios.get(encodedURI)
+    const response = await fetch(encodedURI)
+    // const repos = await axios.get(encodedURI)
       .catch(handleError);
+    
+      // asynchronous function so needs to be `await`
+      const repos = await response.json();
 
-    return repos.data.items
+    return repos.items
 
     // Deleted for async/await refactoring
     // return axios.get(encodedURI).then(({ data }) => data.items);
