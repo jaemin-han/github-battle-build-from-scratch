@@ -47,15 +47,23 @@ Player.propTypes = {
 }
 
 class Results extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      winner: null,
-      loser: null,
-      error: null,
-      loading: true,
-    }
+  // Refactoring to use Class Properties (Class Fields)
+  state = {
+    winner: null,
+    loser: null,
+    error: null,
+    loading: true,
+
   }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     winner: null,
+  //     loser: null,
+  //     error: null,
+  //     loading: true,
+  //   }
+  // }
   componentDidMount() {
     // Destructuring
     const { playerOneName, playerTwoName } = queryString.parse(this.props.location.search);

@@ -55,20 +55,23 @@ SelectLanguage.propTypes = {
 }
 
 class Popular extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            selectedLanguage: 'All',
-            repos: null
-        };
-
-        this.updateLanguage = this.updateLanguage.bind(this);
+    state = {
+        selectedLanguage: 'All',
+        repos: null
     }
+    // constructor() {
+    //     super();
+    //     this.state = {
+
+    //     };
+
+    //     this.updateLanguage = this.updateLanguage.bind(this);
+    // }
     // invoked by react whenever a component mounts to the screen (shown)
     componentDidMount() {
         this.updateLanguage(this.state.selectedLanguage);
     }
-    updateLanguage(lang) {
+    updateLanguage = (lang) => {
         this.setState(() => ({
             selectedLanguage: lang,
             repos: null

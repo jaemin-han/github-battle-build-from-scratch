@@ -4,23 +4,28 @@ import { Link } from 'react-router-dom';
 import PlayerPreview from './PlayerPreview';
 
 class PlayerInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: ''
-    };
+  static propTypes = {
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+  }
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+  static defaultProps = {
+    label: 'Username',
+  }
+
+  state = {
+    username: ''
   }
     // whenever the input field is change, the function below will run
     // this function will update the state
-  handleChange(event) {
+    // Creating new contexts
+  handleChange = (event) => {
     const value = event.target.value;
     this.setState(() => ({ username: value }))
   }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
 
     this.props.onSubmit(
@@ -56,30 +61,23 @@ class PlayerInput extends React.Component {
   }
 }
 
-PlayerInput.propTypes = {
-  id: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-}
 
-PlayerInput.defaultProps = {
-  label: 'Username',
-}
 
 class Battle extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+  // constructor(props) {
+  //   super(props);
+
+    state = {
       playerOneName: '',
       playerTwoName: '',
       playerOneImage: null,
-      playerTwoImage: null,
-    };
+      playerTwoImage: null
+    }
     // 'this' keyword inside 'handleSubmit' function is always going to be referenced in the instance
     // this line allows us to do that.
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleSubmit(id, username) {
+    // this.handleSubmit = this.handleSubmit.bind(this);
+  // }
+  handleSubmit = (id, username) => {
     // arrow function and return an object
     this.setState(() => ({
       [id + 'Name']: username,
@@ -87,7 +85,7 @@ class Battle extends React.Component {
       [id + 'Image']:`https://github.com/${username}.png?size=200`
     }))
   }
-  handleReset(id) {
+  handleReset = (id) => {
     this.setState(() => ({
       [id + 'Name']: '',
       [id + 'Image']: ''

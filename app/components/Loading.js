@@ -9,16 +9,31 @@ const styles = {
 };
 
 class Loading extends React.Component {
+    static propTypes = {
+        speed: PropTypes.number.isRequired,
+        text: PropTypes.string.isRequired
+    };
+    
+    // If text is not specified, whenever someone uses the Loading component, then go ahead and load "Loading below"
+    static defaultProps = {
+        text: "Loading",
+        speed: 300
+    }
+
     // why props....here?
     // i dont understand... what?
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            text: props.text
-          };
-
+    state = {
+        text: this.props.text
     }
+    // constructor(props) {
+    //     super(props);
+
+    //     this.state = {
+    //         text: props.text
+    //       };
+
+    // }
     componentDidMount() {
         // Destructure
         const { text, speed } = this.props
@@ -44,15 +59,6 @@ class Loading extends React.Component {
     }
 }
 
-Loading.propTypes = {
-    speed: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired
-};
 
-// If text is not specified, whenever someone uses the Loading component, then go ahead and load "Loading below"
-Loading.defaultProps = {
-    text: "Loading",
-    speed: 300
-}
 
 export default Loading;
